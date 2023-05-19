@@ -1,6 +1,5 @@
 package pro.sky.hogwarts.school.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pro.sky.hogwarts.school.model.Faculty;
 
@@ -15,32 +14,26 @@ import java.util.stream.Collectors;
 public class FacultyService {
     private final Map<Long, Faculty> faculties = new HashMap<>();
 
-    public ResponseEntity<Faculty> getFaculty(Long id) {
-        Faculty faculty =  faculties.get(id);
-        if(faculty == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(faculty);
+    private long lastFacultyId;
+
+    public Faculty getFaculty(Long id) {
+        return faculties.get(id);
     }
 
     public void addFaculty(Faculty faculty) {
-        faculty.setNextId();
+        faculty.setId(lastFacultyId++);
         faculties.put(faculty.getId(), faculty);
     }
 
-    public ResponseEntity<?> editFaculty(Faculty faculty) {
+    public void editFaculty(Faculty faculty) {
         if(!faculties.containsKey(faculty.getId())) {
-            return ResponseEntity.notFound().build();
+            faculty.setId(lastFacultyId++);
         }
         faculties.put(faculty.getId(), faculty);
-        return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<Faculty> removeFaculty(Long id) {
-        if(!faculties.containsKey(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(faculties.remove(id));
+    public Faculty removeFaculty(Long id) {
+        return faculties.remove(id);
     }
 
     public Collection<Faculty> getFacultiesWithColorEqualTo(String color) {

@@ -11,8 +11,8 @@
     <groupId>pro.sky.hogwarts</groupId>
     <artifactId>school</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>skypro-hw-2-18-school</name>
-    <description>skypro-hw-2-18-school</description>
+    <name>skypro-hw-3-school</name>
+    <description>skypro-hw-3-school</description>
     <properties>
         <java.version>11</java.version>
     </properties>

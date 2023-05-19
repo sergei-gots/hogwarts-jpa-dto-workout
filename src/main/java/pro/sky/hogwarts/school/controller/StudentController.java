@@ -22,18 +22,27 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        return studentService.getStudent(id);
+    public ResponseEntity<Student> getStudent(@PathVariable long id) {
+        Student student = studentService.getStudent(id);
+        if (student == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(student);
     }
 
+
     @PutMapping("/")
-    public ResponseEntity<?> editStudent(@RequestBody Student student) {
-        return studentService.editStudent(student);
+    public void editStudent(@RequestBody Student student) {
+        studentService.editStudent(student);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable Long id) {
-        return studentService.removeStudent(id);
+        Student student = studentService.removeStudent(id);
+        if (student == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(student);
     }
 
     @GetMapping()

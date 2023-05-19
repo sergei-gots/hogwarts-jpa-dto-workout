@@ -22,8 +22,12 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
-        return facultyService.getFaculty(id);
+    public ResponseEntity<Faculty> getFaculty(@PathVariable long id) {
+        Faculty faculty = facultyService.getFaculty(id);
+        if (faculty == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(faculty);
     }
 
     @GetMapping()
@@ -37,12 +41,16 @@ public class FacultyController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> editFaculty(@RequestBody Faculty faculty) {
-        return facultyService.editFaculty(faculty);
+    public void editFaculty(@RequestBody Faculty faculty) {
+        facultyService.editFaculty(faculty);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
-        return facultyService.removeFaculty(id);
+        Faculty faculty = facultyService.removeFaculty(id);
+        if (faculty == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(faculty);
     }
 }

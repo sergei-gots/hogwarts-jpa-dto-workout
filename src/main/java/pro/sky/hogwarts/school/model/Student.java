@@ -1,7 +1,6 @@
 package pro.sky.hogwarts.school.model;
 
 public class Student {
-    private static long lastStudentId;
     private Long id;
     private String name;
     private int age;
@@ -10,10 +9,6 @@ public class Student {
         this.id = id;
         this.name = name;
         this.age = age;
-    }
-
-    public void setNextId() {
-        this.id = lastStudentId++;
     }
 
     public Long getId() {

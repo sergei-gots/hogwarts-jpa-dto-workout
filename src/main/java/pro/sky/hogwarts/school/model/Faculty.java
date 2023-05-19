@@ -1,7 +1,6 @@
 package pro.sky.hogwarts.school.model;
 
 public class Faculty {
-    private static long lastFacultyId;
     private Long id;
     private String name;
     private String color;
@@ -20,9 +19,6 @@ public class Faculty {
         this.id = id;
     }
 
-    public void setNextId() {
-        this.id = lastFacultyId++;
-    }
 
     public String getName() {
         return name;

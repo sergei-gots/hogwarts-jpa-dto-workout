@@ -1,6 +1,5 @@
 package pro.sky.hogwarts.school.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pro.sky.hogwarts.school.model.Student;
 
@@ -13,32 +12,25 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
     private final Map<Long, Student> students = new HashMap<>();
-
-    public ResponseEntity<Student> getStudent(Long id) {
-        if(!students.containsKey(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(students.get(id));
+    private long lastStudentId;
+    public Student getStudent(Long id) {
+        return students.get(id);
     }
 
     public void addStudent(Student student) {
-        student.setNextId();
+        student.setId(lastStudentId++);
         students.put(student.getId(), student);
     }
 
-    public ResponseEntity<?> editStudent(Student student) {
+    public void editStudent(Student student) {
         if(!students.containsKey(student.getId())) {
-            return ResponseEntity.notFound().build();
+            student.setId(lastStudentId++);
         }
         students.put(student.getId(), student);
-        return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<Student> removeStudent(Long id) {
-        if(!students.containsKey(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(students.remove(id));
+    public Student removeStudent(Long id) {
+        return students.remove(id);
     }
 
     public Collection<Student> getStudentsWithAgeEqualto(int age) {
