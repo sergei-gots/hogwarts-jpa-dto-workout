@@ -1,7 +1,7 @@
 package pro.sky.hogwarts.school.model;
 
 public class Faculty {
-    private long lastFacultyId;
+    private static long lastFacultyId;
     private Long id;
     private String name;
     private String color;

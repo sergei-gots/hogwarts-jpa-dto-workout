@@ -1,0 +1,87 @@
+http://localhost:8080/hogwarts/swagger-ui/index.html
+
+http://localhost:8080/hogwarts/faculty/swagger-ui/index.html
+
+http://localhost:8080/hogwarts/students/swagger-ui/index.html
+
+
+###
+POST http://localhost:8080/hogwarts/student/
+Content-Type: application/json
+
+{
+  "name": "Sergei",
+  "age": 46
+}
+
+###
+PUT http://localhost:8080/hogwarts/student/
+Content-Type: application/json
+
+{
+  "id"    : 0,
+  "name"  : "Sergei",
+  "age"   : 47
+}
+###
+DELETE http://localhost:8080/hogwarts/student/0
+###
+GET http://localhost:8080/hogwarts/student/all
+###
+GET http://localhost:8080/hogwarts/student/0
+###
+GET http://localhost:8080/hogwarts/student?age=46
+###
+GET http://localhost:8080/hogwarts/student?age=47
+
+###
+POST http://localhost:8080/hogwarts/faculty/
+Content-Type: application/json
+
+{
+  "name"  : "Gryffindor",
+  "color" : "red"
+}
+
+###
+POST http://localhost:8080/hogwarts/faculty/
+Content-Type: application/json
+
+{
+  "name"  : "Hufflepuff",
+  "color" : "yellow"
+}
+
+###
+PUT http://localhost:8080/hogwarts/faculty/
+Content-Type: application/json
+
+{
+  "id"    : 2,
+  "name"  : "Gryffindor",
+  "color" : "gold"
+}
+###
+PUT http://localhost:8080/hogwarts/faculty/
+Content-Type: application/json
+
+{
+  "id"    : 10,
+  "name"  : "Gryffindor",
+  "color" : "green"
+}
+
+###
+DELETE http://localhost:8080/hogwarts/faculty/2
+###
+GET http://localhost:8080/hogwarts/faculty/all
+###
+GET http://localhost:8080/hogwarts/faculty/0
+###
+GET http://localhost:8080/hogwarts/faculty?color=red
+###
+GET http://localhost:8080/hogwarts/faculty?color=yellow
+###
+GET http://localhost:8080/hogwarts/faculty?color=gold
+
+

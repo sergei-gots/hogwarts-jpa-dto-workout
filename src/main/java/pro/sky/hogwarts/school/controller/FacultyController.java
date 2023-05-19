@@ -1,5 +1,6 @@
 package pro.sky.hogwarts.school.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.hogwarts.school.model.Faculty;
 import pro.sky.hogwarts.school.service.FacultyService;
@@ -21,22 +22,27 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}")
-    public Faculty getFaculty(@PathVariable Long id) {
+    public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
         return facultyService.getFaculty(id);
     }
 
+    @GetMapping()
+    public Collection<Faculty> getFacultiesWithColorEqualTo(@RequestParam String color) {
+        return facultyService.getFacultiesWithColorEqualTo(color);
+    }
+
+    @GetMapping("/all")
+    public Collection<Faculty> getAllFaculties() {
+        return facultyService.getAllFaculties();
+    }
+
     @PutMapping("/")
-    public void editFaculty(@RequestBody Faculty faculty) {
-        facultyService.editFaculty(faculty);
+    public ResponseEntity<?> editFaculty(@RequestBody Faculty faculty) {
+        return facultyService.editFaculty(faculty);
     }
 
     @DeleteMapping("/{id}")
-    public Faculty deleteFaculty(@PathVariable Long id) {
+    public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
         return facultyService.removeFaculty(id);
-    }
-
-    @GetMapping("/")
-    public Collection<Faculty> getFacultiesWithColorEqualTo(@RequestAttribute String color) {
-        return facultyService.getFacultiesWithColorEqualTo(color);
     }
 }
