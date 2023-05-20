@@ -5,14 +5,15 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.11</version>
+        <version>3.0.5</version>
+        <!--version>2.7.11</version-->
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pro.sky.hogwarts</groupId>
-    <artifactId>school</artifactId>
+    <artifactId>hogwarts-school</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>skypro-hw-3-school</name>
-    <description>skypro-hw-3-school</description>
+    <name>sky-pro-hw-3-school</name>
+    <description>sky-pro-hw-3-school</description>
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -20,6 +21,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.8</version>
         </dependency>
 
         <dependency>
