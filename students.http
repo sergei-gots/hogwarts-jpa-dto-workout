@@ -1,0 +1,29 @@
+###
+POST http://localhost:8080/hogwarts/student/
+Content-Type: application/json
+
+{
+  "name": "Sergei",
+  "age": 46
+}
+
+###
+PUT http://localhost:8080/hogwarts/student/
+Content-Type: application/json
+
+{
+  "id"    : 0,
+  "name"  : "Sergei",
+  "age"   : 47
+}
+###
+DELETE http://localhost:8080/hogwarts/student/0
+###
+GET http://localhost:8080/hogwarts/student/all
+###
+GET http://localhost:8080/hogwarts/student/0
+###
+GET http://localhost:8080/hogwarts/student?age=46
+###
+GET http://localhost:8080/hogwarts/student?age=47
+
