@@ -1,43 +1,54 @@
 package pro.sky.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
-import pro.sky.hogwarts.school.model.Student;
+import pro.sky.hogwarts.school.entity.Student;
+import pro.sky.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class StudentService {
-    private final Map<Long, Student> students = new HashMap<>();
-    private long lastStudentId;
-    public Student getStudent(Long id) {
-        return students.get(id);
+
+    private final StudentRepository studentRepository;
+
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
-    public void addStudent(Student student) {
-        student.setId(lastStudentId++);
-        students.put(student.getId(), student);
+    public Optional<Student> getById(Long id) {
+
+        return studentRepository.findById(id);
     }
 
-    public void editStudent(Student student) {
-        if(!students.containsKey(student.getId())) {
-            student.setId(lastStudentId++);
-        }
-        students.put(student.getId(), student);
+    public Student addStudent(Student student) {
+        student.setId(null);
+        return studentRepository.save(student);
     }
 
-    public Student removeStudent(Long id) {
-        return students.remove(id);
+    public Optional<Student> editStudent(Student newStudentData) {
+        return studentRepository.findById(newStudentData.getId())
+                .map(existingStudent -> {
+                        existingStudent.setName(newStudentData.getName());
+                        existingStudent.setAge(newStudentData.getAge());
+                        return studentRepository.save(existingStudent);
+                });
     }
 
-    public Collection<Student> getStudentsWithAgeEqualto(int age) {
-        return students.values().stream().filter(student -> student.getAge() == age).collect(Collectors.toUnmodifiableList());
+    public Optional<Student> deleteById(Long id) {
+        return studentRepository.findById(id)
+                .map(student-> {
+                    deleteById(id);
+                    return student;
+                });
     }
 
-    public Collection<Student> getAllStudents() {
-        return Collections.unmodifiableCollection(students.values());
+    public Collection<Student> findByAge(int age) {
+        return Collections.unmodifiableCollection(studentRepository.findByAge(age));
+    }
+
+    public Collection<Student> findAll() {
+        return Collections.unmodifiableCollection(studentRepository.findAll());
     }
 }

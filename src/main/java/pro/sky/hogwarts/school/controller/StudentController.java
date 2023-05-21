@@ -1,14 +1,17 @@
 package pro.sky.hogwarts.school.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pro.sky.hogwarts.school.model.Student;
+import pro.sky.hogwarts.school.entity.Student;
 import pro.sky.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/student")
+@Tag(name="students", description="Endpoints to operate upon students")
 public class StudentController {
     private final StudentService studentService;
 
@@ -17,42 +20,39 @@ public class StudentController {
     }
 
     @PostMapping("/")
-    public void addStudent(@RequestBody Student student) {
-        studentService.addStudent(student);
+    public Student addStudent(@RequestBody Student student) {
+
+        return studentService.addStudent(student);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable long id) {
-        Student student = studentService.getStudent(id);
-        if (student == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(student);
+        return studentService.getById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(()->ResponseEntity.notFound().build());
     }
 
-
     @PutMapping("/")
-    public void editStudent(@RequestBody Student student) {
-        studentService.editStudent(student);
+    public Optional<Student> editStudent(@RequestBody Student student) {
+
+        return studentService.editStudent(student);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable Long id) {
-        Student student = studentService.removeStudent(id);
-        if (student == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(student);
+        return studentService.deleteById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(()->ResponseEntity.notFound().build());
     }
 
     @GetMapping()
     public Collection<Student> getStudentsWithAgeEqualTo(@RequestParam int age) {
-        return studentService.getStudentsWithAgeEqualto(age);
+        return studentService.findByAge(age);
     }
 
     @GetMapping("/all")
     public Collection<Student> getAllStudents() {
-        return studentService.getAllStudents();
+        return studentService.findAll();
     }
 
 }

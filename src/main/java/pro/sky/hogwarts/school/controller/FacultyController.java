@@ -1,14 +1,17 @@
 package pro.sky.hogwarts.school.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pro.sky.hogwarts.school.model.Faculty;
+import pro.sky.hogwarts.school.entity.Faculty;
 import pro.sky.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/faculty")
+@Tag(name="faculties", description="Endpoints to operate upon faculties")
 public class FacultyController {
     private final FacultyService facultyService;
 
@@ -17,40 +20,38 @@ public class FacultyController {
     }
 
     @PostMapping("/")
-    public void addFaculty(@RequestBody Faculty faculty) {
-        facultyService.addFaculty(faculty);
+    public Faculty addFaculty(@RequestBody Faculty faculty) {
+
+        return facultyService.addFaculty(faculty);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Faculty> getFaculty(@PathVariable long id) {
-        Faculty faculty = facultyService.getFaculty(id);
-        if (faculty == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(faculty);
+        return facultyService.getById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping()
     public Collection<Faculty> getFacultiesWithColorEqualTo(@RequestParam String color) {
-        return facultyService.getFacultiesWithColorEqualTo(color);
+        return facultyService.findByColor(color);
     }
 
     @GetMapping("/all")
     public Collection<Faculty> getAllFaculties() {
-        return facultyService.getAllFaculties();
+        return facultyService.findAll();
     }
 
     @PutMapping("/")
-    public void editFaculty(@RequestBody Faculty faculty) {
-        facultyService.editFaculty(faculty);
+    public Optional<Faculty> editFaculty(@RequestBody Faculty faculty) {
+
+        return facultyService.editFaculty(faculty);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
-        Faculty faculty = facultyService.removeFaculty(id);
-        if (faculty == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(faculty);
+        return facultyService.deleteById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
