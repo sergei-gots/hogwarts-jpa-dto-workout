@@ -43,9 +43,11 @@ public class FacultyController {
     }
 
     @PutMapping("/")
-    public Optional<Faculty> editFaculty(@RequestBody Faculty faculty) {
+    public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty faculty) {
 
-        return facultyService.editFaculty(faculty);
+        return facultyService.editFaculty(faculty)
+                .map(ResponseEntity::ok)
+                .orElseGet(()->ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

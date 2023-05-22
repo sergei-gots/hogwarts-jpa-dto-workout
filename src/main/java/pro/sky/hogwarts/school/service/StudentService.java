@@ -39,7 +39,7 @@ public class StudentService {
     public Optional<Student> deleteById(Long id) {
         return studentRepository.findById(id)
                 .map(student-> {
-                    deleteById(id);
+                    studentRepository.deleteById(id);
                     return student;
                 });
     }
