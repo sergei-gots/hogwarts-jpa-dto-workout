@@ -10,6 +10,11 @@ SELECT name FROM students;
 
 SELECT * FROM students WHERE name LIKE '%o%';
 
+/* ALTER TABLE students DROP COLUMN faculties_id;*/
+
+SELECT * FROM students;
+
+
 UPDATE students SET id=1000 WHERE name LIKE 'Harry%';
 
 SELECT * FROM students WHERE age < id;

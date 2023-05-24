@@ -14,7 +14,9 @@ Content-Type: application/json
 {
   "name": "Mark Twain-3",
   "age": 187,
-  "faculty": 4
+  "faculty": {
+    "id": 4
+  }
 }
 
 ###
@@ -25,7 +27,9 @@ Content-Type: application/json
   "id"    : 1,
   "name"  : "Sergei",
   "age"   : 47,
-  "faculty": 3
+  "faculty": {
+    "id"  : 4
+  }
 }
 
 ###
@@ -36,7 +40,9 @@ Content-Type: application/json
   "id"    : 4,
   "name"  : "Mark Twain",
   "age"   : 187,
-  "faculties_id" : 4
+  "faculty" : {
+    "id"  : 5
+  }
 }
 ###
 DELETE http://localhost:8080/hogwarts/student/1

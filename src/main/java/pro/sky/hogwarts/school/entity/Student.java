@@ -11,7 +11,7 @@ public class Student {
     private String name;
     private int age;
 
-    @JoinColumn(name = "faculties_id")
+    @JoinColumn(name = "faculty_id")
     @ManyToOne
     private Faculty faculty;
 
