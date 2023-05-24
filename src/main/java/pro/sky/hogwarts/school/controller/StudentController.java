@@ -3,7 +3,9 @@ package pro.sky.hogwarts.school.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pro.sky.hogwarts.school.entity.Faculty;
 import pro.sky.hogwarts.school.entity.Student;
+import pro.sky.hogwarts.school.service.FacultyService;
 import pro.sky.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
@@ -32,6 +34,13 @@ public class StudentController {
                 .orElseGet(()->ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{id}/faculty")
+    public ResponseEntity<Faculty> getFacultyByStudentId(@PathVariable long id) {
+        return studentService.getFacultyByStudentId(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(()->ResponseEntity.notFound().build());
+    }
+
     @PutMapping("/")
     public ResponseEntity<Student> editStudent(@RequestBody Student student) {
 
@@ -47,9 +56,15 @@ public class StudentController {
                 .orElseGet(()->ResponseEntity.notFound().build());
     }
 
-    @GetMapping()
-    public Collection<Student> getStudentsWithAgeEqualTo(@RequestParam int age) {
+    @GetMapping(params="age")
+    public Collection<Student> getStudentsByAge(@RequestParam(required=false)  Integer age) {
         return studentService.findByAge(age);
+    }
+
+    @GetMapping(params = {"age0", "age1"})
+    public Collection<Student> getStudentsByAge(@RequestParam(name = "age0") Integer ageMin,
+                                                @RequestParam(name = "age1") Integer ageMax) {
+        return studentService.findByAgeBetween(ageMin, ageMax);
     }
 
     @GetMapping("/all")

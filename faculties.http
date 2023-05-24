@@ -40,12 +40,18 @@ DELETE http://localhost:8080/hogwarts/faculty/2
 ###
 GET http://localhost:8080/hogwarts/faculty/all
 ###
-GET http://localhost:8080/hogwarts/faculty/0
+GET http://localhost:8080/hogwarts/faculty/1
 ###
 GET http://localhost:8080/hogwarts/faculty?color=red
 ###
 GET http://localhost:8080/hogwarts/faculty?color=yellow
 ###
 GET http://localhost:8080/hogwarts/faculty?color=gold
+###
+GET http://localhost:8080/hogwarts/faculty?color_or_name=griffindoR
+###
+GET http://localhost:8080/hogwarts/faculty?color_or_name=RED
 
 
+### Students by Faculty Id
+GET http://localhost:8080/hogwarts/faculty/1/students

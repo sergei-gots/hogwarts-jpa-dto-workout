@@ -2,7 +2,9 @@ package pro.sky.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.hogwarts.school.entity.Faculty;
+import pro.sky.hogwarts.school.entity.Student;
 import pro.sky.hogwarts.school.repository.FacultyRepository;
+import pro.sky.hogwarts.school.repository.StudentRepository;
 
 
 import java.util.Collection;
@@ -12,9 +14,12 @@ import java.util.Optional;
 @Service
 public class FacultyService {
     private final FacultyRepository facultyRepository;
+    private final StudentRepository studentRepository;
 
-    public FacultyService(FacultyRepository facultyRepository) {
+    public FacultyService(FacultyRepository facultyRepository,
+                          StudentRepository studentRepository) {
         this.facultyRepository = facultyRepository;
+        this.studentRepository = studentRepository;
     }
 
     public Optional<Faculty> getById(Long id) {
@@ -44,11 +49,23 @@ public class FacultyService {
                 });
     }
 
+    public Collection<Faculty> findAll() {
+        return Collections.unmodifiableCollection(facultyRepository.findAll());
+    }
+
     public Collection<Faculty> findByColor(String color) {
         return Collections.unmodifiableCollection(facultyRepository.findByColor((color)));
     }
 
-    public Collection<Faculty> findAll() {
-        return Collections.unmodifiableCollection(facultyRepository.findAll());
+    public Collection<Faculty> findByColorIgnoreCaseOrNameIgnoreCase(String colorOrName) {
+        return Collections.unmodifiableCollection(
+               facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(
+                       colorOrName,
+                       colorOrName)
+            );
+    }
+
+    public Collection<Student> findStudentsByFacultyId(long id) {
+        return studentRepository.findByFacultyId(id);
     }
 }
