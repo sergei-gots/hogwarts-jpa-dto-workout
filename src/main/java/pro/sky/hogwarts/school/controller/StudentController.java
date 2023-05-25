@@ -5,11 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.hogwarts.school.entity.Faculty;
 import pro.sky.hogwarts.school.entity.Student;
-import pro.sky.hogwarts.school.service.FacultyService;
 import pro.sky.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/student")
