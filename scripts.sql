@@ -20,3 +20,17 @@ UPDATE students SET id=1000 WHERE name LIKE 'Harry%';
 SELECT * FROM students WHERE age < id;
 
 SELECT * FROM students ORDER BY age;
+
+SELECT * FROM faculties;
+
+INSERT INTO faculties (name, color) VALUES('Ravenclaw', 'blue');
+INSERT INTO faculties (name, color) VALUES
+                                        ('Gryffindor', 'red'),
+                                        ('Slytherin', 'green'),
+                                        ('Hufflepuff', 'yellow');
+
+SELECT * FROM students ORDER BY age;
+INSERT INTO students (name, age, faculty_id) VALUES
+                                        ('Harry Potter',        18, 2),
+                                        ('Germione Grainger',   19, 2),
+                                        ('Drako Malfoy',        18, 3);
