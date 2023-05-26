@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/student/{student_id}/avatar")
@@ -25,17 +25,11 @@ public class AvatarController {
         this.avatarService = avatarService;
     }
 
-    @PostMapping(
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
     ResponseEntity<String> uploadAvatarForStudentId(
             @PathVariable(name = "student_id") long studentId,
-            @RequestParam MultipartFile avatar) throws IOException {
-        if(avatar.getSize() > 200 * 1024) {
-            return ResponseEntity.badRequest().body("File is to big (size should be <= 200kB).");
-        }
-
+            @RequestParam MultipartFile avatar)  {
         return avatarService.uploadAvatarForStudentId(studentId, avatar);
     }
 
@@ -44,11 +38,7 @@ public class AvatarController {
             @PathVariable(name= "student_id") long studentId,
             HttpServletResponse httpServletResponse) throws IOException
     {
-        Optional<Avatar> optionalAvatar = avatarService.getAvatarForStudentId(studentId);
-        if(optionalAvatar.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        Avatar avatar = optionalAvatar.get();
+        Avatar avatar = avatarService.getAvatarForStudentId(studentId);
         Path path = Path.of(avatar.getFilePath());
         try (
                 InputStream is = Files.newInputStream(path);
@@ -67,17 +57,10 @@ public class AvatarController {
     @GetMapping("/preview")
     public ResponseEntity<byte[]> downloadAvatarPreviewForStudentId(
             @PathVariable(name = "student_id") long studentId) {
-        Optional<Avatar> optionalAvatar = avatarService.getAvatarForStudentId(studentId);
-        if(optionalAvatar.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        Avatar avatar = optionalAvatar.get();
+        Avatar avatar = avatarService.getAvatarForStudentId(studentId);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
         httpHeaders.setContentLength(avatar.getPreview().length);
         return ResponseEntity.ok().headers(httpHeaders).body(avatar.getPreview());
     }
-
-
-
 }
