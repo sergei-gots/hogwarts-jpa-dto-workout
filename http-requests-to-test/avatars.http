@@ -1,0 +1,16 @@
+###
+GET http://localhost:8080/hogwarts/student/1/avatar
+###
+GET http://localhost:8080/hogwarts/student/1/avatar/preview
+###
+GET http://localhost:8080/hogwarts/student/2/avatar
+###
+GET http://localhost:8080/hogwarts/student/2/avatar/preview
+###
+GET http://localhost:8080/hogwarts/student/4/avatar
+###
+GET http://localhost:8080/hogwarts/student/4/avatar/preview
+###
+GET http://localhost:8080/hogwarts/student/14/avatar
+###
+GET http://localhost:8080/hogwarts/student/14/avatar/preview

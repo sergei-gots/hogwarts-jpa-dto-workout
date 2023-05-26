@@ -22,7 +22,7 @@ public class StudentService {
         this.facultyRepository = facultyRepository;
     }
 
-    public Optional<Student> getById(Long id) {
+    public Optional<Student> findById(Long id) {
 
         return studentRepository.findById(id);
     }

@@ -1,9 +1,6 @@
 package pro.sky.hogwarts.school.entity;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import javax.persistence.*;
-import java.util.Arrays;
 
 @Entity
 @Table(name = "avatars")
@@ -11,16 +8,11 @@ public class Avatar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Value("${avatars.folder.path}")
     private String filePath;
-
     private long fileSize;
-
     private String mediaType;
-
-    //@lob
-    private byte[] data;
+    @Lob
+    private byte[] preview;
 
     @OneToOne
     @JoinColumn(name = "student_id")
@@ -36,7 +28,6 @@ public class Avatar {
                 ", filePath='" + filePath + '\'' +
                 ", fileSize=" + fileSize +
                 ", mediaType='" + mediaType + '\'' +
-                //", data=" + Arrays.toString(data) +
                 ", student=" + student +
                 '}';
     }
@@ -47,6 +38,14 @@ public class Avatar {
 
     public Long getId() {
         return id;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public long getFileSize() {
@@ -65,12 +64,12 @@ public class Avatar {
         this.mediaType = mediaType;
     }
 
-    public byte[] getData() {
-        return data;
+    public byte[] getPreview() {
+        return preview;
     }
 
-    public void setData(byte[] data) {
-        this.data = data;
+    public void setPreview(byte[] data) {
+        this.preview = data;
     }
 
     public Student getStudent() {
