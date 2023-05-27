@@ -1,11 +1,11 @@
-###
-GET http://localhost:8080/hogwarts/student/1/avatar
-### ALTERNATIVE Get Avatar (Student 1)
-GET http://localhost:8080/hogwarts/student/1/avatar/alter-avatar
-###
+### Get Avatar (Student 1)
+GET http://localhost:8080/hogwarts/student/1/avatar/
+### Get Preview (Student 1)
 GET http://localhost:8080/hogwarts/student/1/avatar/preview
-### ALTERNATIVE Get Preview (Student 1)
-GET http://localhost:8080/hogwarts/student/1/avatar/alter-preview
+### Get Preview with full-stream processing description (Student 1)
+GET http://localhost:8080/hogwarts/student/1/avatar/deprecated/preview
+### Get Avatar with full-stream processing description (Student 1)
+GET http://localhost:8080/hogwarts/student/1/avatar/deprecated/
 ###
 GET http://localhost:8080/hogwarts/student/2/avatar
 ###
@@ -16,12 +16,8 @@ GET http://localhost:8080/hogwarts/student/4/avatar
 GET http://localhost:8080/hogwarts/student/4/avatar/preview
 ###
 GET http://localhost:8080/hogwarts/student/14/avatar
-### ALTERNATIVE Get Avatar (Student 14)
-GET http://localhost:8080/hogwarts/student/14/avatar/alter-avatar
 ###
 GET http://localhost:8080/hogwarts/student/14/avatar/preview
-### ALTERNATIVE Get Preview (Student 14)
-GET http://localhost:8080/hogwarts/student/14/avatar/alter-preview
 
 ### Upload Avatar StudentId=1
 POST http://localhost:8080/hogwarts/student/1/avatar

@@ -8,7 +8,6 @@ import pro.sky.hogwarts.school.entity.Student;
 import pro.sky.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/faculty")
@@ -36,6 +35,7 @@ public class FacultyController {
     @GetMapping("/{id}/students")
     public Collection<Student> getStudentsByFacultyId(@PathVariable long id) {
         return facultyService.findStudentsByFacultyId(id);
+
     }
 
     @GetMapping("/all")

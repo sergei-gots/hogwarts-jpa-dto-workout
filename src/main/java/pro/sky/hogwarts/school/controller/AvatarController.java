@@ -35,7 +35,8 @@ public class AvatarController {
         avatarService.uploadAvatarForStudentId(studentId, avatar);
     }
 
-    @GetMapping
+    @Deprecated
+    @GetMapping("/deprecated")
     public ResponseEntity<?> downloadAvatarForStudentId(
             @PathVariable(name= "student_id") long studentId,
             HttpServletResponse httpServletResponse) throws IOException
@@ -56,7 +57,8 @@ public class AvatarController {
 
     }
 
-    @GetMapping("/preview")
+    @Deprecated
+    @GetMapping("/deprecated/preview")
     public ResponseEntity<byte[]> downloadAvatarPreviewForStudentId(
             @PathVariable(name = "student_id") long studentId) {
         Avatar avatar = avatarService.getAvatarForStudentId(studentId);
@@ -66,14 +68,14 @@ public class AvatarController {
         return ResponseEntity.ok().headers(httpHeaders).body(avatar.getPreview());
     }
 
-    @GetMapping("/alter-preview")
+    @GetMapping("/preview")
     public ResponseEntity<byte[]> downloadPreview(
             @PathVariable(name = "student_id") long studentId) {
         return prepareDownloadResponse(
                 avatarService.getPairPreviewAndMediaTypeByStudentId(studentId));
     }
 
-    @GetMapping("/alter-avatar")
+    @GetMapping()
     public ResponseEntity<byte[]> downloadAvatar(
             @PathVariable(name = "student_id") long studentId) {
         return prepareDownloadResponse(
