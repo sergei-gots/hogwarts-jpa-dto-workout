@@ -1,7 +1,9 @@
 package pro.sky.hogwarts.school.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +29,10 @@ public class AvatarController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
-    ResponseEntity<String> uploadAvatarForStudentId(
+    void uploadAvatarForStudentId(
             @PathVariable(name = "student_id") long studentId,
             @RequestParam MultipartFile avatar)  {
-        return avatarService.uploadAvatarForStudentId(studentId, avatar);
+        avatarService.uploadAvatarForStudentId(studentId, avatar);
     }
 
     @GetMapping
@@ -63,4 +65,26 @@ public class AvatarController {
         httpHeaders.setContentLength(avatar.getPreview().length);
         return ResponseEntity.ok().headers(httpHeaders).body(avatar.getPreview());
     }
+
+    @GetMapping("/alter-preview")
+    public ResponseEntity<byte[]> downloadPreview(
+            @PathVariable(name = "student_id") long studentId) {
+        return prepareDownloadResponse(
+                avatarService.getPairPreviewAndMediaTypeByStudentId(studentId));
+    }
+
+    @GetMapping("/alter-avatar")
+    public ResponseEntity<byte[]> downloadAvatar(
+            @PathVariable(name = "student_id") long studentId) {
+        return prepareDownloadResponse(
+                avatarService.getPairAvatarAndMediaTypeByStudentId(studentId));
+    }
+
+    private ResponseEntity<byte[]> prepareDownloadResponse(Pair<byte[], String> avatarAndMediatype) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.parseMediaType(avatarAndMediatype.getSecond()))
+                .contentLength(avatarAndMediatype.getFirst().length)
+                .body(avatarAndMediatype.getFirst());
+    }
+
 }

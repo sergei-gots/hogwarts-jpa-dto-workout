@@ -1,7 +1,7 @@
 package pro.sky.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +36,7 @@ public class AvatarService {
         this.avatarsDirPath = avatarsDirPath;
     }
 
-    public ResponseEntity<String> uploadAvatarForStudentId(long studentId, MultipartFile avatarFile) {
+    public void uploadAvatarForStudentId(long studentId, MultipartFile avatarFile) {
         Student student = studentService
                 .findById(studentId)
                 .orElseThrow(StudentNotFoundException::new);
@@ -64,7 +64,6 @@ public class AvatarService {
             avatar.setFileSize(avatarFile.getSize());
             avatar.setPreview(generateImagePreview(filePath));
             avatarRepository.save(avatar);
-            return ResponseEntity.ok().build();
         } catch (IOException e) {
             throw new AvatarProcessingException();
         }
@@ -91,6 +90,20 @@ public class AvatarService {
                             StringUtils.getFilenameExtension(filePath.toString())),
                     baos);
             return baos.toByteArray();
+        }
+    }
+
+    public Pair<byte[], String> getPairPreviewAndMediaTypeByStudentId(long studentId) {
+        Avatar avatar = getAvatarForStudentId(studentId);
+        return Pair.of(avatar.getPreview(), avatar.getMediaType());
+    }
+
+    public Pair<byte[], String> getPairAvatarAndMediaTypeByStudentId(long studentId) {
+        Avatar avatar = getAvatarForStudentId(studentId);
+        try {
+            return Pair.of(Files.readAllBytes(Path.of(avatar.getFilePath())), avatar.getMediaType());
+        } catch(IOException e) {
+            throw new AvatarNotFoundException();
         }
     }
 }
