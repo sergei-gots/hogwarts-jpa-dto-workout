@@ -19,7 +19,7 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @PostMapping("/")
+    @PostMapping
     public Student addStudent(@RequestBody Student student) {
 
         return studentService.addStudent(student);
@@ -39,7 +39,7 @@ public class StudentController {
                 .orElseGet(()->ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<Student> editStudent(@RequestBody Student student) {
 
         return studentService.editStudent(student)
