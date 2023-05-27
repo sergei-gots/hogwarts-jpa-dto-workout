@@ -19,7 +19,7 @@ public class FacultyController {
         this.facultyService = facultyService;
     }
 
-    @PostMapping("/")
+    @PostMapping
     public Faculty addFaculty(@RequestBody Faculty faculty) {
 
         return facultyService.addFaculty(faculty);
@@ -43,7 +43,7 @@ public class FacultyController {
         return facultyService.findAll();
     }
 
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty faculty) {
 
         return facultyService.editFaculty(faculty)

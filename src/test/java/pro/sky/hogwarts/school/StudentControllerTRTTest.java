@@ -13,6 +13,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pro.sky.hogwarts.school.entity.Faculty;
+import pro.sky.hogwarts.school.entity.Student;
 import pro.sky.hogwarts.school.repository.FacultyRepository;
 import pro.sky.hogwarts.school.repository.StudentRepository;
 
@@ -25,34 +26,52 @@ public class StudentControllerTRTTest {
     private int port;
 
     @Autowired
-    TestRestTemplate testRestTemplate;
+    private TestRestTemplate testRestTemplate;
 
     @Autowired
-    StudentRepository studentRepository;
+    private StudentRepository studentRepository;
 
     @Autowired
-    FacultyRepository facultyRepository;
+    private FacultyRepository facultyRepository;
 
     private final Faker faker = new Faker();
 
     @Test
     public void addStudent_test() {
-        addFaculty_and_test(generateFaculty());
+        addStudent_andTest(generateStdudent(addFaculty_and_test(generateFaculty())));
+    }
+
+    private Student addStudent_andTest(Student student) {
+        ResponseEntity<Student> studentResponseEntity =
+                                           //POST http://localhost:8080/hogwarts/student/
+                testRestTemplate.postForEntity("http://localhost:" + port + "/hogwarts/student",
+                        student,
+                        Student.class);
+        assertThat(studentResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Student responseStudent = studentResponseEntity.getBody();
+        assertThat(responseStudent).isNotNull();
+        assertThat(responseStudent)
+                .usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(student);
+        assertThat(responseStudent.getId()).isNotNull();
+        return responseStudent;
     }
 
     private Faculty addFaculty_and_test(Faculty faculty) {
-        final String url = "http://localhost:" + port + "/hogwarts/faculty";
         ResponseEntity<Faculty> facultyResponseEntity =
                 testRestTemplate.postForEntity(
-                        url,
-                        faculty, Faculty.class
+                        "http://localhost:" + port + "/hogwarts/faculty",
+                        faculty,
+                        Faculty.class
                 );
         assertThat(facultyResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         Faculty responseFaculty = facultyResponseEntity.getBody();
         assertThat(responseFaculty).isNotNull();
-        assertThat(responseFaculty).usingRecursiveComparison().isEqualTo(faculty);
+        assertThat(responseFaculty)
+                .usingRecursiveComparison().ignoringFields("id")
+                .isEqualTo(faculty);
         assertThat(responseFaculty.getId()).isNotNull();
-
         return responseFaculty;
     }
     private Faculty generateFaculty() {
@@ -61,6 +80,15 @@ public class StudentControllerTRTTest {
         faculty.setColor(faker.color().name());
         return faculty;
     }
+
+    private Student generateStdudent(Faculty faculty) {
+        Student student = new Student();
+        student.setFaculty(faculty);
+        student.setName(faker.harryPotter().character());
+        student.setAge(faker.random().nextInt(11,48));
+        return student;
+    }
+
 
 
 }
