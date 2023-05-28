@@ -44,8 +44,7 @@ public class FacultyControllerMockTest {
     //Therefore, we will check how the controller and service works,
     //and we will not check what occurs in the database.
 
-    //hogwarts/faculty/
-    private final String url = "/hogwarts/faculty/";
+    private final String url = "/faculty";
     @Autowired
     private ObjectMapper objectMapper;
     private final Faker faker = new Faker();
