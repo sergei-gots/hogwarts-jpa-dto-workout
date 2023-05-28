@@ -30,7 +30,7 @@ public class AvatarService {
 
     public AvatarService(AvatarRepository avatarRepository,
                          StudentService studentService,
-                         @Value("${avatars.dir.path}") String avatarsDirPath) {
+                         @Value("${application.avatars.dir.path}") String avatarsDirPath) {
         this.avatarRepository = avatarRepository;
         this.studentService = studentService;
         this.avatarsDirPath = avatarsDirPath;
