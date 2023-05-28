@@ -1,5 +1,6 @@
 package pro.sky.hogwarts.school;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Test;
@@ -16,15 +17,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import pro.sky.hogwarts.school.controller.FacultyController;
 import pro.sky.hogwarts.school.entity.Faculty;
+import pro.sky.hogwarts.school.entity.Student;
 import pro.sky.hogwarts.school.repository.FacultyRepository;
 import pro.sky.hogwarts.school.repository.StudentRepository;
 import pro.sky.hogwarts.school.service.FacultyService;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = FacultyController.class)
@@ -51,7 +58,7 @@ public class FacultyControllerMockTest {
     private final Faker faker = new Faker();
 
     @Test
-    public void create_test() throws Exception {
+    public Faculty create_test() throws Exception {
         Faculty faculty = generateFaculty(1L);
 
         when(facultyRepository.save(any())).thenReturn(faculty);
@@ -59,6 +66,39 @@ public class FacultyControllerMockTest {
         mockMvc.perform(
                 MockMvcRequestBuilders
                         .post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(faculty)
+
+                )
+        )
+                .andExpect(result -> {
+                            MockHttpServletResponse mockHttpServletResponse =
+                                result.getResponse();
+                            Faculty facultyResult = objectMapper.readValue(
+                                    mockHttpServletResponse.getContentAsString(StandardCharsets.UTF_8),
+                                    Faculty.class);
+                            assertThat(mockHttpServletResponse.getStatus())
+                                    .isEqualTo(HttpStatus.OK.value());
+                            assertThat(facultyResult)
+                                    .isNotNull()
+                                    .usingRecursiveComparison().isEqualTo(faculty);
+                        }
+                );
+        return faculty;
+    }
+    @Test
+    public void update_test() throws Exception {
+        Faculty faculty = create_test();
+
+        faculty.setName(faker.harryPotter().house());
+        faculty.setColor(faker.color().name());
+
+        when(facultyRepository.save(any())).thenReturn(faculty);
+        when(facultyRepository.findById(faculty.getId())).thenReturn(Optional.of(faculty));
+
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                        .put(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(faculty)
 
@@ -85,7 +125,7 @@ public class FacultyControllerMockTest {
         Faculty faculty = generateFaculty(id);
         Optional<Faculty> optionalFaculty = Optional.of(faculty);
 
-        when(facultyRepository.findById(any())).thenReturn(optionalFaculty);
+        when(facultyRepository.findById(id)).thenReturn(optionalFaculty);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -114,7 +154,7 @@ public class FacultyControllerMockTest {
         long wrongId = 2;
         Faculty faculty = generateFaculty(id);
 
-        when(facultyRepository.findById(any())).thenReturn(Optional.empty());
+        when(facultyRepository.findById(wrongId)).thenReturn(Optional.empty());
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -138,7 +178,7 @@ public class FacultyControllerMockTest {
         Faculty faculty = generateFaculty(id);
         Optional<Faculty> optionalFaculty = Optional.of(faculty);
 
-        when(facultyRepository.findById(any())).thenReturn(optionalFaculty);
+        when(facultyRepository.findById(id)).thenReturn(optionalFaculty);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -167,7 +207,7 @@ public class FacultyControllerMockTest {
         long wrongId = 2;
         Faculty faculty = generateFaculty(id);
 
-        when(facultyRepository.findById(any())).thenReturn(Optional.empty());
+        when(facultyRepository.findById(wrongId)).thenReturn(Optional.empty());
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -185,6 +225,132 @@ public class FacultyControllerMockTest {
                 );
     }
 
+    /*@Test
+    public void getStudentsByFacultyId_test() throws Exception {
+        long id = 1;
+        Faculty faculty = generateFaculty(id);
+        Collection<Student> students =Stream.generate(()-> {
+            Student student = new Student();
+            student.setId(faker.random().nextLong());
+            student.setName(faker.harryPotter().character());
+            student.setFaculty(faculty);
+                    return student;
+        }).limit(10).collect(Collectors.toList());
+
+        when(studentRepository.findByFacultyId(any())).thenReturn(students);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get(url + id + "/students")
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(result -> {
+                            MockHttpServletResponse mockHttpServletResponse =
+                                    result.getResponse();
+                            assertThat(mockHttpServletResponse.getStatus())
+                                    .isEqualTo(HttpStatus.OK.value());
+                            Collection<Student> resultStudents =
+                                    objectMapper.readValue(mockHttpServletResponse.getContentAsString(),
+                                        new TypeReference<>(){});
+                                        assertThat(resultStudents)
+                                            .isNotNull()
+                                            .hasSize(students.size())
+                                            .usingRecursiveFieldByFieldElementComparator()
+                                            .containsExactlyInAnyOrderElementsOf(students;
+                        }
+                );
+    }
+
+    @Test
+    public void getAllFaculties_Test() throws Exception {
+        List<Faculty> faculties =Stream
+                .generate(()-> generateFaculty(faker.random().nextLong()))
+                .limit(10).collect(Collectors.toList());
+
+        when(facultyRepository.findAll()).thenReturn(faculties);
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get(url + "all")
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(result -> {
+                            MockHttpServletResponse mockHttpServletResponse =
+                                    result.getResponse();
+                            assertThat(mockHttpServletResponse.getStatus())
+                                    .isEqualTo(HttpStatus.OK.value());
+                            List<Faculty> resultFaculties =
+                                    objectMapper.readValue(mockHttpServletResponse.getContentAsString(),
+                                            new TypeReference<>(){});
+                            assertThat(resultFaculties)
+                                    .isNotNull()
+                                    .hasSize(faculties.size())
+                                    .usingRecursiveFieldByFieldElementComparator()
+                                    .containsExactlyInAnyOrderElementsOf(faculties);
+                        }
+                );
+    }
+
+    @Test
+    public void getAllFacultiesByColor_Test() throws Exception {
+        List<Faculty> faculties =Stream
+                .generate(()-> generateFaculty(faker.random().nextLong()))
+                .limit(10).collect(Collectors.toList());
+
+        String color = "someColor";
+        when(facultyRepository.findByColor(eq("someColor"))).thenReturn(faculties);
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get(url)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .queryParam("color", color)
+                )
+                .andExpect(result -> {
+                            MockHttpServletResponse mockHttpServletResponse =
+                                    result.getResponse();
+                            assertThat(mockHttpServletResponse.getStatus())
+                                    .isEqualTo(HttpStatus.OK.value());
+                            List<Faculty> resultFaculties =
+                                    objectMapper.readValue(mockHttpServletResponse.getContentAsString(),
+                                            new TypeReference<>(){});
+                            assertThat(resultFaculties)
+                                    .isNotNull()
+                                    .hasSize(faculties.size())
+                                    .usingRecursiveFieldByFieldElementComparator()
+                                    .containsExactlyInAnyOrderElementsOf(faculties);
+                        }
+                );
+    }
+
+    @Test
+    public void getFacultiesByColorOrNameIgnoreCase_Test() throws Exception {
+        List<Faculty> faculties =Stream
+                .generate(()-> generateFaculty(faker.random().nextLong()))
+                .limit(10).collect(Collectors.toList());
+
+        String colorOrName = "SomeCOloROrName";
+        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(eq(colorOrName),eq(colorOrName))).thenReturn(faculties);
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get(url)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .queryParam("color_or_name", colorOrName)
+                )
+                .andExpect(result -> {
+                            MockHttpServletResponse mockHttpServletResponse =
+                                    result.getResponse();
+                            assertThat(mockHttpServletResponse.getStatus())
+                                    .isEqualTo(HttpStatus.OK.value());
+                            List<Faculty> resultFaculties =
+                                    objectMapper.readValue(mockHttpServletResponse.getContentAsString(),
+                                            new TypeReference<>(){});
+                            assertThat(resultFaculties)
+                                    .isNotNull()
+                                    .hasSize(faculties.size())
+                                    .usingRecursiveFieldByFieldElementComparator()
+                                    .containsExactlyInAnyOrderElementsOf(faculties);
+                        }
+                );
+    }*/
     private Faculty generateFaculty(long id) {
         Faculty faculty = new Faculty();
         faculty.setId(id);

@@ -234,7 +234,8 @@ public class StudentControllerTRTTest {
             Collection<Student> expected) {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody())
+        Collection<Student> actual = responseEntity.getBody();
+        assertThat(actual)
                 .isNotNull()
                 .hasSize(expected.size())
                 .usingRecursiveFieldByFieldElementComparator()
