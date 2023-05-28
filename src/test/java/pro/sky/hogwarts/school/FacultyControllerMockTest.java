@@ -26,7 +26,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@WebMvcTest(controllers= FacultyController.class)
+@WebMvcTest(controllers = FacultyController.class)
 @ExtendWith(MockitoExtension.class)
 public class FacultyControllerMockTest {
 
@@ -59,10 +59,10 @@ public class FacultyControllerMockTest {
         when(facultyRepository.save(any())).thenReturn(faculty);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.post(
-                        url,
-                        MediaType.APPLICATION_JSON,
-                        objectMapper.writeValueAsString(faculty)
+                MockMvcRequestBuilders
+                        .post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(faculty)
 
                 )
         )
@@ -72,12 +72,12 @@ public class FacultyControllerMockTest {
                             Faculty facultyResult = objectMapper.readValue(
                                     mockHttpServletResponse.getContentAsString(StandardCharsets.UTF_8),
                                     Faculty.class);
-                            assertThat(mockHttpServletResponse.getStatus()).isEqualTo(HttpStatus.OK);
+                            assertThat(mockHttpServletResponse.getStatus())
+                                    .isEqualTo(HttpStatus.OK.value());
                             assertThat(facultyResult)
                                     .isNotNull()
                                     .usingRecursiveComparison().isEqualTo(faculty);
                         }
-
                 );
     }
 }
