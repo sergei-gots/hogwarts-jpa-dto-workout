@@ -151,7 +151,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     @Test
-    public void when_id_is_not_listed_then_we_get_NOT_FOUND_test() throws Exception {
+    public void when_id_is_not_listed_then_get_returns_NOT_FOUND_test() throws Exception {
         long wrongId = 2;
 
         when(facultyRepository.findById(wrongId)).thenReturn(Optional.empty());
