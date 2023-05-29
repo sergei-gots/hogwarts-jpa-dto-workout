@@ -29,14 +29,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = FacultyController.class)
 @ExtendWith(MockitoExtension.class)
-public class FacultyControllerMockTest {
+public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +49,7 @@ public class FacultyControllerMockTest {
     //We will have real FacultyService:
     @SpyBean
     private FacultyService facultyService;
-    //Therefore, we will check how the controller and service works,
+    //Therefore, we will check how the controller and service work,
     //and we will not check what occurs in the database.
 
     private final String url = "/faculty/";
@@ -150,9 +150,7 @@ public class FacultyControllerMockTest {
 
     @Test
     public void get_when_idIsNotListed_test() throws Exception {
-        long id = 1;
         long wrongId = 2;
-        Faculty faculty = generateFaculty(id);
 
         when(facultyRepository.findById(wrongId)).thenReturn(Optional.empty());
 
@@ -203,9 +201,7 @@ public class FacultyControllerMockTest {
 
     @Test
     public void delete_when_idIsNotListed_test() throws Exception {
-        long id = 1;
         long wrongId = 2;
-        Faculty faculty = generateFaculty(id);
 
         when(facultyRepository.findById(wrongId)).thenReturn(Optional.empty());
 
@@ -225,11 +221,11 @@ public class FacultyControllerMockTest {
                 );
     }
 
-    /*@Test
+    @Test
     public void getStudentsByFacultyId_test() throws Exception {
         long id = 1;
         Faculty faculty = generateFaculty(id);
-        Collection<Student> students =Stream.generate(()-> {
+        Collection<Student> students = Stream.generate(()-> {
             Student student = new Student();
             student.setId(faker.random().nextLong());
             student.setName(faker.harryPotter().character());
@@ -237,7 +233,7 @@ public class FacultyControllerMockTest {
                     return student;
         }).limit(10).collect(Collectors.toList());
 
-        when(studentRepository.findByFacultyId(any())).thenReturn(students);
+        when(studentRepository.findByFacultyId(id)).thenReturn(students);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -256,7 +252,7 @@ public class FacultyControllerMockTest {
                                             .isNotNull()
                                             .hasSize(students.size())
                                             .usingRecursiveFieldByFieldElementComparator()
-                                            .containsExactlyInAnyOrderElementsOf(students;
+                                            .containsExactlyInAnyOrderElementsOf(students);
                         }
                 );
     }
@@ -350,7 +346,7 @@ public class FacultyControllerMockTest {
                                     .containsExactlyInAnyOrderElementsOf(faculties);
                         }
                 );
-    }*/
+    }
     private Faculty generateFaculty(long id) {
         Faculty faculty = new Faculty();
         faculty.setId(id);
