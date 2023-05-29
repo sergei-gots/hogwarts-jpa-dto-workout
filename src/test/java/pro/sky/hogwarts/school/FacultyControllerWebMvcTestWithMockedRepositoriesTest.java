@@ -248,8 +248,8 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
                             assertThat(mockHttpServletResponse.getStatus())
                                     .isEqualTo(HttpStatus.OK.value());
                             Collection<Student> studentsResult = objectMapper.readValue(mockHttpServletResponse.getContentAsString(),
-                            new TypeReference<>() {
-                            });
+                                    new TypeReference<>() {
+                                    });
                             assertThat(studentsResult)
                                     .isNotNull()
                                     .hasSize(students.size())
@@ -265,8 +265,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
         when(facultyRepository.findAll()).thenReturn(faculties);
         performRequestAndCheckOkResult(
                 MockMvcRequestBuilders
-                        .get(url + "all")
-                        .contentType(MediaType.APPLICATION_JSON),
+                        .get(url + "all"),
                 faculties
         );
     }
@@ -277,14 +276,14 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
         String color = "someColor";
         when(facultyRepository.findByColor(eq(color))).thenReturn(faculties);
         performRequestAndCheckOkResult(MockMvcRequestBuilders
-                .get(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .queryParam("color", color), faculties);
+                        .get(url)
+                        .queryParam("color", color),
+                faculties);
 
     }
 
     @Test
-    public void when_get_faculties_by_colror_or_name_ignore_case_test() throws Exception {
+    public void when_get_faculties_by_color_or_name_ignore_case_test() throws Exception {
         List<Faculty> faculties = generateFaculites();
 
         String colorOrName = "SomeCOloROrName";
@@ -292,14 +291,13 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
         performRequestAndCheckOkResult(
                 MockMvcRequestBuilders
                         .get(url)
-                        .contentType(MediaType.APPLICATION_JSON)
                         .queryParam("color_or_name", colorOrName),
                 faculties);
     }
 
     private void performRequestAndCheckOkResult(MockHttpServletRequestBuilder mockHttpServletRequestBuilder,
                                                 Collection<Faculty> expected) throws Exception {
-        mockMvc.perform(mockHttpServletRequestBuilder)
+        mockMvc.perform(mockHttpServletRequestBuilder.contentType(MediaType.APPLICATION_JSON))
                 .andExpect(result -> {
                             MockHttpServletResponse mockHttpServletResponse =
                                     result.getResponse();
@@ -327,7 +325,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     private List<Faculty> generateFaculites() {
-        return  Stream
+        return Stream
                 .generate(() -> generateFaculty(faker.random().nextLong()))
                 .limit(10).collect(Collectors.toList());
     }
