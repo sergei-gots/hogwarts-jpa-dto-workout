@@ -14,5 +14,5 @@ SELECT students.name, students.age, faculties.name
 */
 
 SELECT name FROM students
-    RIGHT JOIN avatars
+    INNER JOIN avatars
         ON students.id = avatars.student_id;

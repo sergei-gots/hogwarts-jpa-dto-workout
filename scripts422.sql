@@ -10,7 +10,7 @@
      id SERIAL PRIMARY KEY,
      name VARCHAR(63) NOT NULL,
      age INT2 CHECK ( age > 0 ),
-     car_id SERIAL REFERENCES cars (id),
+     car_id INT REFERENCES cars (id),
      driver_license BOOLEAN
  );
 
