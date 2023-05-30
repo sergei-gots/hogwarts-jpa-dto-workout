@@ -59,7 +59,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     private final Faker faker = new Faker();
 
     @Test
-    public Faculty when_create_faculty_test() throws Exception {
+    public Faculty when_send_request_to_create_faculty_then_ok_returned() throws Exception {
         Faculty faculty = generateFaculty(1L);
 
         when(facultyRepository.save(any())).thenReturn(faculty);
@@ -89,8 +89,8 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     @Test
-    public void when_update_faculty_test() throws Exception {
-        Faculty faculty = when_create_faculty_test();
+    public void when_send_request_to_update_faculty_then_ok_returned() throws Exception {
+        Faculty faculty = when_send_request_to_create_faculty_then_ok_returned();
 
         faculty.setName(faker.harryPotter().house());
         faculty.setColor(faker.color().name());
@@ -122,7 +122,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     @Test
-    public void when_id_is_listed_then_get_returns_OK_test() throws Exception {
+    public void when_send_request_to_get_by_existing_id_then_ok_returned() throws Exception {
         long id = 1;
         Faculty faculty = generateFaculty(id);
         Optional<Faculty> optionalFaculty = Optional.of(faculty);
@@ -151,7 +151,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     @Test
-    public void when_id_is_not_listed_then_get_returns_NOT_FOUND_test() throws Exception {
+    public void when_send_request_to_get_by_wrong_id_then_not_found_returned() throws Exception {
         long wrongId = 2;
 
         when(facultyRepository.findById(wrongId)).thenReturn(Optional.empty());
@@ -173,7 +173,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     @Test
-    public void when_id_is_listed_then_delete_returns_OK_test() throws Exception {
+    public void when_send_request_to_delete_faculty_by_existing_id_then_ok_returned() throws Exception {
         long id = 1;
         Faculty faculty = generateFaculty(id);
         Optional<Faculty> optionalFaculty = Optional.of(faculty);
@@ -202,7 +202,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     @Test
-    public void when_id_is_not_listed_then_delete_returns_NOT_FOUND_test() throws Exception {
+    public void when_send_request_delete_faculty_by_wrong_id_then_not_found_returned() throws Exception {
         long wrongId = 2;
 
         when(facultyRepository.findById(wrongId)).thenReturn(Optional.empty());
@@ -224,7 +224,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     @Test
-    public void when_get_students_by_faculty_id_test() throws Exception {
+    public void when_send_request_to_get_students_by_faculty_id_then_ok_returned() throws Exception {
         long id = 1;
         Faculty faculty = generateFaculty(id);
         Collection<Student> students = Stream.generate(() -> {
@@ -260,7 +260,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     @Test
-    public void when_get_all_faculties_test() throws Exception {
+    public void when_send_request_to_get_all_faculties_then_ok_returned() throws Exception {
         List<Faculty> faculties = generateFaculites();
         when(facultyRepository.findAll()).thenReturn(faculties);
         performRequestAndCheckOkResult(
@@ -271,7 +271,7 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     @Test
-    public void when_get_all_faculties_by_color_test() throws Exception {
+    public void when_send_request_to_get_all_faculties_by_color_then_ok_returned() throws Exception {
         List<Faculty> faculties = generateFaculites();
         String color = "someColor";
         when(facultyRepository.findByColor(eq(color))).thenReturn(faculties);
@@ -283,7 +283,9 @@ public class FacultyControllerWebMvcTestWithMockedRepositoriesTest {
     }
 
     @Test
-    public void when_get_faculties_by_color_or_name_ignore_case_test() throws Exception {
+    public void
+    when_send_request_to_get_faculties_by_color_or_name_ignore_case_then_ok_returned()
+            throws Exception {
         List<Faculty> faculties = generateFaculites();
 
         String colorOrName = "SomeCOloROrName";
