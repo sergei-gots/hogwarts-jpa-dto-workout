@@ -1,12 +1,8 @@
 package pro.sky.hogwarts.school.dto;
 
-import org.springframework.beans.factory.annotation.Value;
-import pro.sky.hogwarts.school.entity.Student;
 import pro.sky.hogwarts.school.service.AvatarPageService;
 
 public class AvatarDto {
-    @Value("${application.home.url}")
-    private String APPLICATION_HOME_URL;
     private Long id;
     private long fileSize;
     private String mediaType;
