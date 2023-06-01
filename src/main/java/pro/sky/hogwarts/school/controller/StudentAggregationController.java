@@ -24,7 +24,7 @@ public class StudentAggregationController {
         return ResponseEntity.ok(studentAggregationService.getCount());
     }
     @GetMapping("/avg-age")
-    public ResponseEntity<Integer> getStudentsAverageAge() {
+    public ResponseEntity<Double> getStudentsAverageAge() {
         return ResponseEntity.ok(studentAggregationService.getAvgAge());
     }
 
