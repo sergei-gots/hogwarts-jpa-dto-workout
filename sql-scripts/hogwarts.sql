@@ -34,3 +34,6 @@ INSERT INTO students (name, age, faculty_id) VALUES
                                         ('Harry Potter',        18, 2),
                                         ('Germione Grainger',   19, 2),
                                         ('Drako Malfoy',        18, 3);
+
+
+SELECT * FROM students ORDER BY id DESC LIMIT 5 ;
