@@ -1,0 +1,10 @@
+### GET Students count
+GET http://localhost:8080/hogwarts/student/count
+### GET Students average age
+GET http://localhost:8080/hogwarts/student/avg-age
+### GET last 5 students
+GET http://localhost:8080/hogwarts/student/last-5
+### GET last N students
+GET http://localhost:8080/hogwarts/student/last?count=3
+### GET last 5 students
+GET http://localhost:8080/hogwarts/student/last
