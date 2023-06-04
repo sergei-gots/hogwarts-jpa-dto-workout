@@ -28,11 +28,12 @@ public class StudentService {
     }
 
     public Optional<Student> findById(Long id) {
-        logger.info("Method findById(Long id={}) was invoked for search a student.", id);
+        logger.info("Method findById(Long id={}) has been invoked.", id);
         return studentRepository.findById(id);
     }
 
     public Student addStudent(Student student) {
+        logger.info("Method addStudent(Student student={}) has been invoked.", student);
         student.setId(null);
         student.setFaculty(Optional.ofNullable(student.getFaculty())
                 .filter(f -> f.getId() != null)
@@ -42,6 +43,7 @@ public class StudentService {
     }
 
     public Optional<Student> editStudent(Student newStudentData) {
+        logger.info("Method editStudent(Student newStudentData={}) has been invoked.", newStudentData);
         return studentRepository.findById(newStudentData.getId())
                 .map(existingStudent -> {
                         existingStudent.setName(newStudentData.getName());
@@ -55,6 +57,7 @@ public class StudentService {
     }
 
     public Optional<Student> deleteById(Long id) {
+        logger.info("Method deleteById(Long id={}) has been invoked.", id);
         return studentRepository.findById(id)
                 .map(student-> {
                     studentRepository.deleteById(id);
@@ -63,18 +66,23 @@ public class StudentService {
     }
 
     public Collection<Student> findByAge(int age) {
+        logger.info("Method findByAge(int age={}) has been invoked.", age);
         return Collections.unmodifiableCollection(studentRepository.findByAge(age));
     }
 
     public Collection<Student> findByAgeBetween(int ageMin, int ageMax) {
+        logger.info("Method findByAgeBetween(int ageMin={}, int ageMax={}) has been invoked.",
+                ageMin, ageMax);
         return Collections.unmodifiableCollection(studentRepository.findByAgeBetween(ageMin, ageMax));
     }
 
     public Collection<Student> findAll() {
+        logger.info("Method findByAll() has been invoked.");
         return Collections.unmodifiableCollection(studentRepository.findAll());
     }
 
     public Optional<Faculty> getFacultyByStudentId(long id) {
+        logger.info("Method getFacultyByStudentId(long id={}) has been invoked.", id);
         return studentRepository.findById(id)
                 .map(Student::getFaculty);
     }
