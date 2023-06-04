@@ -1,5 +1,7 @@
 package pro.sky.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pro.sky.hogwarts.school.entity.Faculty;
 import pro.sky.hogwarts.school.entity.Student;
@@ -16,14 +18,17 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
 
+    private final Logger logger;
+
     public StudentService(StudentRepository studentRepository,
                           FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
         this.facultyRepository = facultyRepository;
+        logger = LoggerFactory.getLogger(StudentService.class);
     }
 
     public Optional<Student> findById(Long id) {
-
+        logger.info("Method findById(Long id={}) was invoked for search a student.", id);
         return studentRepository.findById(id);
     }
 
