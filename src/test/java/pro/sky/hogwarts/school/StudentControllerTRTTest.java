@@ -344,5 +344,4 @@ public class StudentControllerTRTTest {
         return faker.random().nextInt(11, 48);
     }
 
-
 }

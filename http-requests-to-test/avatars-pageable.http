@@ -1,7 +1,7 @@
 ### GET the defalut avatars page with default amount per page avatars
 GET http://localhost:8080/hogwarts/avatar/
 ### GET the avatars  page with index #1  page with default amount per page avatars
-GET http://localhost:8080/hogwarts/avatar?page=1
+GET http://localhost:8081/hogwarts/avatar?page=1
 ### GET the avatars  page with index #0  page with amount per page avatars = 2
 GET http://localhost:8080/hogwarts/avatar?page=0&size=2
 ### GET the avatars  page with index #10  page with amount per page avatars = 2

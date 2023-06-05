@@ -16,7 +16,7 @@ public class AvatarDto {
         this.id = id;
         this.fileSize = fileSize;
         this.mediaType = mediaType;
-        this.url = AvatarPageService.getApplicationHomeUrl() +
+        this.url = AvatarPageService.getAppHomeUrl() +
                 "/student/" + studentId + "/avatar";
     }
 

@@ -1,1 +1,4 @@
 http://localhost:8080/hogwarts/swagger-ui/index.html#
+
+### Get Port Info-Service
+GET http://localhost:8080/hogwarts/getPort

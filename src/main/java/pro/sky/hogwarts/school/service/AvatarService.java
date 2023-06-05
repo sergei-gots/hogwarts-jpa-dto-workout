@@ -1,5 +1,7 @@
 package pro.sky.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class AvatarService {
     private final AvatarRepository avatarRepository;
     private final StudentService studentService;
     private final String avatarsDirPath;
+    private final Logger logger;
 
     public AvatarService(AvatarRepository avatarRepository,
                          StudentService studentService,
@@ -34,9 +37,13 @@ public class AvatarService {
         this.avatarRepository = avatarRepository;
         this.studentService = studentService;
         this.avatarsDirPath = avatarsDirPath;
+        logger = LoggerFactory.getLogger(AvatarService.class);
+        logger.info("AvatarService instance has been successfully created.");
     }
 
     public void uploadAvatarForStudentId(long studentId, MultipartFile avatarFile) {
+        logger.info("Method uploadAvatarForStudentId(long studentId={}, MultipartFile avatarFile={}) has been invoked.",
+                studentId, avatarFile);
         Student student = studentService
                 .findById(studentId)
                 .orElseThrow(StudentNotFoundException::new);
@@ -44,16 +51,6 @@ public class AvatarService {
                 studentId + "." +
                         StringUtils.getFilenameExtension(avatarFile.getOriginalFilename()));
         try {
-       /*     Files.createDirectories(filePath.getParent());
-            Files.deleteIfExists(filePath);
-            try (InputStream is = avatarFile.getInputStream();
-                 OutputStream os = Files.newOutputStream(filePath);
-                 BufferedInputStream bis = new BufferedInputStream(is, 1024);
-                 BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-            ) {
-                bis.transferTo(bos);
-            }*/
-
             byte[] data = avatarFile.getBytes();
             Files.write(filePath, data);
 
@@ -65,16 +62,22 @@ public class AvatarService {
             avatar.setPreview(generateImagePreview(filePath));
             avatarRepository.save(avatar);
         } catch (IOException e) {
+            logger.error("IOException e with message=\"{}\" during avatar upload occurred ",
+                    e.getMessage()
+            );
             throw new AvatarProcessingException();
         }
     }
 
     public Avatar getAvatarForStudentId(long studentId) {
+        logger.info("Method getAvatarForStudentId(long studentId={}) has been invoked.",
+                studentId);
         return avatarRepository.findByStudentId(studentId).orElseThrow(AvatarNotFoundException::new);
     }
 
     private byte[] generateImagePreview(Path filePath) throws IOException {
-
+        logger.info("Method generateImagePreview(Path filePath={}) has been invoked.",
+                filePath);
         try (InputStream is = Files.newInputStream(filePath);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()
@@ -94,15 +97,22 @@ public class AvatarService {
     }
 
     public Pair<byte[], String> getPairPreviewAndMediaTypeByStudentId(long studentId) {
+        logger.info("Method getPairPreviewAndMediaTypeByStudentId(long studentId={}) has been invoked.",
+                studentId);
         Avatar avatar = getAvatarForStudentId(studentId);
         return Pair.of(avatar.getPreview(), avatar.getMediaType());
     }
 
     public Pair<byte[], String> getPairAvatarAndMediaTypeByStudentId(long studentId) {
+        logger.info("Method getPairAvatarAndMediaTypeByStudentId(long studentId={}) has been invoked.",
+                studentId);
         Avatar avatar = getAvatarForStudentId(studentId);
         try {
             return Pair.of(Files.readAllBytes(Path.of(avatar.getFilePath())), avatar.getMediaType());
         } catch(IOException e) {
+            logger.error("IOException e with message=\"{}\" during avatar retrieving occurred ",
+                    e.getMessage()
+            );
             throw new AvatarNotFoundException();
         }
     }
