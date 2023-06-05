@@ -48,7 +48,7 @@ public class StudentControllerTRTTest {
     private String hogwartsUrl() {
         return "http://localhost:" + port + "/hogwarts";
     }
-/*
+
     @AfterEach
     public void afterEach() {
         studentRepository.deleteAll();
@@ -344,5 +344,4 @@ public class StudentControllerTRTTest {
         return faker.random().nextInt(11, 48);
     }
 
-*/
 }
