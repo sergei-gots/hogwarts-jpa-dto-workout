@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.hogwarts.school.entity.Student;
 import pro.sky.hogwarts.school.service.StudentConsoleOutputService;
-import pro.sky.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 
@@ -19,16 +18,16 @@ public class StudentConsoleOutputController {
     }
 
 
-    @GetMapping("/print-all")
-    public Collection<Student> printAllStudentsInConsole() {
+    @GetMapping("/print-6-students")
+    public Collection<Student> print6StudentsInConsole() {
 
-        return studentConsoleOutputService.printAllInConsole();
+        return studentConsoleOutputService.print6StudentsInConsole();
     }
 
-    @GetMapping("/print-all-synchronized")
-    public Collection<Student> printAllStudentsInConsoleSynchronized() {
+    @GetMapping("/print-6-students-synchronized")
+    public Collection<Student> print6StudentsInConsoleSynchronized() {
 
-        return studentConsoleOutputService.printAllInConsoleSynchronized();
+        return studentConsoleOutputService.print6StudentsInConsoleSynchronized();
     }
 
 }

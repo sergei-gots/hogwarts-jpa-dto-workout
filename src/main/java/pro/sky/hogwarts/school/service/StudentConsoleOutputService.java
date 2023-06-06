@@ -3,15 +3,11 @@ package pro.sky.hogwarts.school.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import pro.sky.hogwarts.school.entity.Faculty;
 import pro.sky.hogwarts.school.entity.Student;
 import pro.sky.hogwarts.school.repository.FacultyRepository;
 import pro.sky.hogwarts.school.repository.StudentRepository;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class StudentConsoleOutputService {
@@ -26,44 +22,47 @@ public class StudentConsoleOutputService {
     }
 
 
-    public Collection<Student> printAllInConsole() {
-        logger.info("Method printAllInConsole() has been invoked.");
-        Collection<Student> result = Collections.unmodifiableCollection(studentRepository.findAll());
-        Iterator iterator = result.iterator();
-        print2Students(iterator);
-        new Thread(() -> print2Students(iterator)).start();
-        new Thread(() -> print2Students(iterator)).start();
-        return result;
+    public Collection<Student> print6StudentsInConsole() {
+        logger.info("Method print6StudentsInConsole() has been invoked.");
+        List<Student> students = Collections.unmodifiableList(studentRepository.findAll());
+        print2Students(students, 0);
+        new Thread(() -> print2Students(students, 2)).start();
+        new Thread(() -> print2Students(students, 4)).start();
+        return students;
     }
 
-    private void print2Students(Iterator iterator) {
-        for (int i = 0; i < 2; i++) {
-            if (iterator.hasNext()) {
-                System.out.println(Thread.currentThread().getName() +
-                        ": student-info: " +
-                        iterator.next());
-            }
+    private void print2Students(List<Student> students, int startIndex) {
+        if(students.size()>=startIndex) {
+            logger.info("Thread-{}: student-info:{}",
+                    Thread.currentThread().getId(),
+                    students.get(startIndex));
+        }
+        if(students.size()>startIndex) {
+            logger.info("Thread-{}: student-info:{}",
+                    Thread.currentThread().getId(),
+                    students.get(startIndex+1) );
         }
     }
 
-    public Collection<Student> printAllInConsoleSynchronized() {
-        logger.info("Method printAllInConsoleSyncronized() has been invoked.");
-        Collection<Student> result = Collections.unmodifiableCollection(studentRepository.findAll());
-        Iterator iterator = result.iterator();
-        print2Students(iterator);
-        new Thread(() -> print2Students(iterator)).start();
-        new Thread(() -> print2Students(iterator)).start();
-        return result;
+    public Collection<Student> print6StudentsInConsoleSynchronized() {
+        logger.info("Method print6StudentsInConsoleSynchronized() has been invoked.");
+        List<Student> students = Collections.unmodifiableList(studentRepository.findAll());
+        print2Students(students, 0);
+        new Thread(() -> print2Students(students, 2)).start();
+        new Thread(() -> print2Students(students, 4)).start();
+        return students;
     }
 
-
-    private synchronized void print2StudentsSynchronized(Iterator iterator) {
-        for (int i = 0; i < 2; i++) {
-            if (iterator.hasNext()) {
-                System.out.println(Thread.currentThread().getName() +
-                        ": student-info: " +
-                        iterator.next());
-            }
+    private synchronized void print2StudentsSynchronized(List<Student> students, int startIndex) {
+        if(students.size()>=startIndex) {
+            logger.info("{}: student-info:{}",
+                    Thread.currentThread().getName(),
+                    students.get(startIndex));
+        }
+        if(students.size()>startIndex) {
+            logger.info("{}: student-info:{}",
+                    Thread.currentThread().getName(),
+                    students.get(startIndex+1) );
         }
     }
 }
