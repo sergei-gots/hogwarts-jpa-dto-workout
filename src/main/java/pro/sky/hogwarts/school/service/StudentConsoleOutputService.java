@@ -32,15 +32,17 @@ public class StudentConsoleOutputService {
     }
 
     private void print2Students(List<Student> students, int startIndex) {
-        if(students.size()>=startIndex) {
-            logger.info("Thread-{}: student-info:{}",
-                    Thread.currentThread().getId(),
-                    students.get(startIndex));
-        }
-        if(students.size()>startIndex) {
-            logger.info("Thread-{}: student-info:{}",
-                    Thread.currentThread().getId(),
-                    students.get(startIndex+1) );
+        try {
+            if (students.size() >= startIndex) {
+                Thread.sleep(100);
+                printToConsole(Thread.currentThread(), students.get(startIndex));
+            }
+            if (students.size() > startIndex) {
+                Thread.sleep(100);
+                printToConsole(Thread.currentThread(), students.get(startIndex + 1));
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -48,21 +50,31 @@ public class StudentConsoleOutputService {
         logger.info("Method print6StudentsInConsoleSynchronized() has been invoked.");
         List<Student> students = Collections.unmodifiableList(studentRepository.findAll());
         print2Students(students, 0);
-        new Thread(() -> print2Students(students, 2)).start();
-        new Thread(() -> print2Students(students, 4)).start();
+        new Thread(() -> print2StudentsSynchronized(students, 2)).start();
+        new Thread(() -> print2StudentsSynchronized(students, 4)).start();
         return students;
     }
 
     private synchronized void print2StudentsSynchronized(List<Student> students, int startIndex) {
-        if(students.size()>=startIndex) {
-            logger.info("{}: student-info:{}",
-                    Thread.currentThread().getName(),
-                    students.get(startIndex));
+        try {
+            if (students.size() >= startIndex) {
+                Thread.sleep(100);
+                printToConsole(Thread.currentThread(), students.get(startIndex));
+            }
+            if (students.size() > startIndex) {
+                Thread.sleep(100);
+                printToConsole(Thread.currentThread(), students.get(startIndex + 1));
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        if(students.size()>startIndex) {
-            logger.info("{}: student-info:{}",
-                    Thread.currentThread().getName(),
-                    students.get(startIndex+1) );
-        }
+    }
+
+    private void printToConsole(Thread thread, Student student) {
+        logger.trace("Thread-{}: student-info:{}",
+                thread.getId(),
+                student);
+        System.out.println("Thread-" + thread.getId() + ": student-info:" + student);
+
     }
 }
