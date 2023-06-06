@@ -47,6 +47,11 @@ public class StudentStreamController {
                                 "Sum using reduce(0, (a,b) -> a + b)",
                                 studentStreamService.calcQuasiSumOfArithmeticProgressionFrom1to1MUsingReduce(repeatsNumber)
                         )
+                )
+                .add(Pair.of(
+                                "Sum using parallel stream reduce(0, (a,b) -> a + b)",
+                                studentStreamService.calcQuasiSumOfArithmeticProgressionFrom1to1MUsingParallelStreamReduce(repeatsNumber)
+                        )
                 ).add(Pair.of(
                                 "Sum using formula",
                                 studentStreamService.calcQuasiSumOfArithmeticProgressionFrom1to1MUsingFormula(repeatsNumber)
