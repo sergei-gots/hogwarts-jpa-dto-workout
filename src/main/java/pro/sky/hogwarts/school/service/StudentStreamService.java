@@ -65,20 +65,6 @@ public class StudentStreamService {
         for (int i = 0; i < repeats; i++) {
             result = Stream.iterate(1, a -> a + 1)
                     .limit(1_000_000)
-                    .reduce(0, (a, b) -> a + b);
-        }
-        long time1 = System.currentTimeMillis();
-        return Pair.of(result, time1 - time0);
-    }
-
-    public Pair<Long, Long> calcQuasiSumOfArithmeticProgressionFrom1to1MUsingReduceSum(int repeats) {
-        logger.info("Method calcQuasiSumOfArithmeticProgressionFrom1to1MusingReduceSum(int repeats={}) has been invoked.",
-                repeats);
-        long result = 0;
-        long time0 = System.currentTimeMillis();
-        for (int i = 0; i < repeats; i++) {
-            result = Stream.iterate(1, a -> a + 1)
-                    .limit(1_000_000)
                     .reduce(Integer::sum).orElse(0);
         }
         long time1 = System.currentTimeMillis();
