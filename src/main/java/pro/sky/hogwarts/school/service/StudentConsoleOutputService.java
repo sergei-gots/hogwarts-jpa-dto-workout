@@ -2,27 +2,38 @@ package pro.sky.hogwarts.school.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pro.sky.hogwarts.school.entity.Student;
-import pro.sky.hogwarts.school.repository.StudentRepository;
+import pro.sky.hogwarts.school.repository.StudentGetFirst6Repository;
 
 import java.util.*;
 
 @Service
 public class StudentConsoleOutputService {
 
-    private final StudentRepository studentRepository;
+    private final StudentGetFirst6Repository studentRepository;
     private final Logger logger;
 
-    public StudentConsoleOutputService(StudentRepository studentRepository) {
+    public StudentConsoleOutputService(StudentGetFirst6Repository studentRepository) {
         this.studentRepository = studentRepository;
         logger = LoggerFactory.getLogger(StudentConsoleOutputService.class);
     }
 
 
+    public List<Student> getFirst6() {
+        logger.info("Method getFirst6() has been invoked.");
+        return Collections.unmodifiableList(
+                studentRepository.page(
+                        PageRequest.of(0,6) //, Sort.Direction.ASC)
+                )
+        );
+    }
+
     public Collection<Student> print6StudentsInConsole() {
         logger.info("Method print6StudentsInConsole() has been invoked.");
-        List<Student> students = Collections.unmodifiableList(studentRepository.findAll());
+        List<Student> students = getFirst6();
         print2Students(students, 0);
         new Thread(() -> print2Students(students, 2)).start();
         new Thread(() -> print2Students(students, 4)).start();
@@ -46,7 +57,7 @@ public class StudentConsoleOutputService {
 
     public Collection<Student> print6StudentsInConsoleSynchronized() {
         logger.info("Method print6StudentsInConsoleSynchronized() has been invoked.");
-        List<Student> students = Collections.unmodifiableList(studentRepository.findAll());
+        List<Student> students = getFirst6();
         print2Students(students, 0);
         synchronized (this) {
             new Thread(() -> print2StudentsSynchronized(students, 2)).start();
