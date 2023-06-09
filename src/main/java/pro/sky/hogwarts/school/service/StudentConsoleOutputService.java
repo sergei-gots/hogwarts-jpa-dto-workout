@@ -26,7 +26,7 @@ public class StudentConsoleOutputService {
         logger.info("Method getFirst6() has been invoked.");
         return Collections.unmodifiableList(
                 studentRepository.page(
-                        PageRequest.of(0,6) //, Sort.Direction.ASC)
+                        PageRequest.of(0,6, Sort.by("students.id"))
                 )
         );
     }

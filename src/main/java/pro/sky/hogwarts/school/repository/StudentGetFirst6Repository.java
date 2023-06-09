@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface StudentGetFirst6Repository extends JpaRepository <Student, Long>{
 
-    @Query(nativeQuery=true,
-            value="SELECT * FROM students ORDER BY id")
-        //"SELECT new pro.sky.hogwarts.school.entity.Student(id, name, age, faculty) FROM Student")
+    @Query(//nativeQuery=true,
+           // value="SELECT * FROM students ORDER BY id")
+        "SELECT new pro.sky.hogwarts.school.entity.Student(id, name, age, faculty) FROM Student")
     List<Student> page(Pageable pageable);
 }

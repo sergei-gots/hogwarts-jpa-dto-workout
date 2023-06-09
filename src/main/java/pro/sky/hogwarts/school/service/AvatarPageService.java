@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pro.sky.hogwarts.school.dto.AvatarDto;
 import pro.sky.hogwarts.school.repository.AvatarRepository;
@@ -37,6 +38,6 @@ public class AvatarPageService {
         logger.info("Method getAvatarPage(int pageNumber={}, int pageSize={}) has been invoked.",
                 pageNumber, pageSize);
         return avatarRepository
-                .page(PageRequest.of(pageNumber, pageSize));
+                .page(PageRequest.of(pageNumber, pageSize, Sort.by("id")));
     }
 }
