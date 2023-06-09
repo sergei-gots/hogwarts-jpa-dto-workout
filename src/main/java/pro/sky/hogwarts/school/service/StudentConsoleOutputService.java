@@ -15,6 +15,7 @@ public class StudentConsoleOutputService {
 
     private final StudentGetFirst6Repository studentRepository;
     private final Logger logger;
+    private int printedIndex;
 
     public StudentConsoleOutputService(StudentGetFirst6Repository studentRepository) {
         this.studentRepository = studentRepository;
@@ -26,7 +27,8 @@ public class StudentConsoleOutputService {
         logger.info("Method getFirst6() has been invoked.");
         return Collections.unmodifiableList(
                 studentRepository.page(
-                        PageRequest.of(0,6, Sort.by("students.id"))
+                        PageRequest.of(0, 6, Sort.Direction.ASC, "students.id")
+                        //PageRequest.of(0,6, Sort.by("students.id"))
                 )
         );
     }
@@ -41,22 +43,18 @@ public class StudentConsoleOutputService {
     }
 
     private void print2Students(List<Student> students, int startIndex) {
-        try {
-            if (students.size() >= startIndex) {
-                Thread.sleep(100);
-                printToConsole(Thread.currentThread(), students.get(startIndex), startIndex);
-            }
-            if (students.size() > startIndex) {
-                Thread.sleep(100);
-                printToConsole(Thread.currentThread(), students.get(startIndex + 1), startIndex + 1);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        if (students.size() >= startIndex) {
+            printToConsole(Thread.currentThread(), students.get(startIndex), startIndex);
+        }
+        if (students.size() > startIndex) {
+            printToConsole(Thread.currentThread(), students.get(startIndex + 1), startIndex + 1);
         }
     }
 
     public Collection<Student> print6StudentsInConsoleSynchronized() {
         logger.info("Method print6StudentsInConsoleSynchronized() has been invoked.");
+
         List<Student> students = getFirst6();
         print2Students(students, 0);
         synchronized (this) {
@@ -68,24 +66,28 @@ public class StudentConsoleOutputService {
 
     private synchronized void print2StudentsSynchronized(List<Student> students, int startIndex) {
         try {
-            if (students.size() >= startIndex) {
+            while (printedIndex < startIndex - 1) {
                 Thread.sleep(100);
+            }
+
+            if (students.size() >= startIndex) {
                 printToConsole(Thread.currentThread(), students.get(startIndex), startIndex);
             }
             if (students.size() > startIndex) {
-                Thread.sleep(100);
-                printToConsole(Thread.currentThread(), students.get(startIndex + 1), startIndex+1);
+                printToConsole(Thread.currentThread(), students.get(startIndex + 1), startIndex + 1);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private void printToConsole(Thread thread, Student student, int index) {
+    private synchronized void printToConsole(Thread thread, Student student, int index) {
+
         logger.trace("Thread-{}: student-info:{}",
                 thread.getId(),
                 student);
-        System.out.println("Thread-" + thread.getId() + ": student-info#" + (index+1) + ":" + student);
+        printedIndex = index;
+        System.out.println("Thread-" + thread.getId() + ": student-info#" + (index + 1) + ":" + student);
 
     }
 }
